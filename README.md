@@ -1,3 +1,5 @@
-Code for MHacks 2013
+"Code for MHacks 2013
 
--Akul
+-Akul"
+
+- Michael Scott
