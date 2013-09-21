@@ -1,36 +1,47 @@
-var textSentiment = function(url_input) {
-  var api = http.createClient(80, 'http://access.alchemyapi.com/calls/url/URLGetTextSentiment');
-  var obj = {};
-  var request = api.request('POST',
+var request = require("request");
+var http = require("http");
+var llist = [];
+var rlist = []; 
+var JSON_extractor = function(list, url) {
+  var obj = [];
+  //Get JSON for multiple keywords
+  for (i=0; i < list.length; i++)
+  {
+    var keyword = list[i];
+    var request = api.request('POST',
     {
-      'url': url_input
-      'apikey': 2094dd01fd7cbceb7e1bb916840e40e81f25d16f
-      'outputMode' : json
+      'target' : keyword,
+      'url': url_input,
+      'apikey': '2094dd01fd7cbceb7e1bb916840e40e81f25d16f',
+      'outputMode' : 'json'
+    } , function (response) {
+            // If the API sent an error msg, ignore keyword
+    console.log("Got the API");
+    if(response.status === 'ERROR') {}
+    else
+    {
+    //Create object with keyword, score
+    var temp = {word : keyword, score : response.docSentiment.score};
+    if(response.docSentiment.mixed === 1)
+    {
+      //If its mixed, set sentiment to mixed
+      temp.sentiment = 'mixed';
+    }
+    else
+    {
+      temp.sentiment = response.docSentiment.type;
+    }
+    //Add object to list
+    obj.push(response);
+    }
     });
-
-  request.on('response', function () {
-      obj = JSON.parse(response); });    
-  request.end();
-
-// Need to put code to keep relevant parts of JSON
-// and put into MongoDB
+    request.end();
+  }
+  return obj;
 }
 
-/*<!--
-var url = "http://www.google.com/";
-var method = "POST";
-var postData = "Some data";
+var extract_feels = function(url) {
+  var liberal_feels = JSON_extractor(llist,url);
+  var conservative_feels = JSON_extractor(rlist,url);
 
-var async = true;
-var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-var request = new XMLHttpRequest();
-request.onload = function () {
-   var status = request.status; // HTTP response status, e.g., 200 for "200 OK"
-   var data = request.responseText; // Returned data, e.g., an HTML document.
 }
-
-request.open(method, url, async);
-
-request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-request.send(postData);
--->*/
