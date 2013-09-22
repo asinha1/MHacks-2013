@@ -1,7 +1,6 @@
 //alert("bout to start");
 var request = require('request');
-
-
+var XMLHttpRequest = require("XMLHttpRequest");
 //alert("start 1");
 var http = require("http");
 //alert("start 2");
@@ -28,14 +27,45 @@ var llist = new Array("Obama", "Obamacare", "liberal");
 var rlist = new Array("Mitt", "Romney", "guns", "Bush", "Syria"); 
 function JSON_extractor(list, url_input) {
   var obj = new Array();
-  var api = http.createClient(80, 'http://access.alchemyapi.com/calls/url/URLGetTargetedSentiment');
+//  var api = http.createClient(80, 'http://access.alchemyapi.com/calls/url/URLGetTargetedSentiment');
   //Get JSON for multiple keywords
   //alert("first");
   for (i=0; i < list.length; i++)
   {
     //alert("second");
     var keyword = list[i];
+
+    var oRequest = new XMLHttpRequest(); //set up request form
+    //URL
+    var sURL = 'http://access.alchemyapi.com/calls/url/URLGetTargetedSentiment';
+    oRequest.open("POST", sURL, false);
+    oRequest.setRequestHeader('target', keyword);
+    oRequest.setRequestHeader('url', url_input);
+    oRequest.setRequestHeader('apikey', '2094dd01fd7cbceb7e1bb916840e40e81f25d16f');
+    oRequest.setRequestHeader('outputMode', 'json');
+    oRequest.send(null);
+    var response = oRequest.responseText;
+    if(response.status === 'ERROR') 
+      {console.error.bind(console, 'connection error:');}
+    else
+    {
+      //Create object with keyword, score
+      var temp = {word : keyword, score : response.docSentiment.score};
+      if(response.docSentiment.mixed === 1)
+      {
+        //If its mixed, set sentiment to mixed
+        temp.sentiment = 'mixed';
+      }
+      else
+      {
+        temp.sentiment = response.docSentiment.type;
+      }
+      //Add object to list
+      obj.push(response);
+    }
     
+    
+    /*    
     var request = api.request('POST',
     {
       'target' : keyword,
@@ -63,8 +93,7 @@ function JSON_extractor(list, url_input) {
     //Add object to list
     obj.push(response);
     }
-    });
-    request.end();
+    });*/
   }
   return obj;
 }
