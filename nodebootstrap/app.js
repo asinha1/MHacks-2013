@@ -10,8 +10,7 @@ var user = require('./routes/user');
 var contact = require('./routes/contact');
 var http = require('http');
 var path = require('path');
-
-var article = [{author: "Akul", _id : 1}, {author: "Aashish", _id : 1}];]
+//var article = [{author: "Akul", _id : 1}, {author: "Aashish", _id : 1}];]
 
 
 var app = express();
@@ -37,9 +36,10 @@ app.get('/', about.text);
 app.get('/about', about.text);
 app.get('/contact', contact.text);
 app.get('/users', user.list);
-app.get('/articles/:id', function(req, res) {
+app.post('/about', about.postUrl);
+//app.get('/articles/:id', function(req, res) {
   
-});
+//});
 
 
 http.createServer(app).listen(app.get('port'), function(){
