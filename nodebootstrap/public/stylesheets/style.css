@@ -24,6 +24,11 @@ body {
   overflow-x: hidden;
 }
 
+.red .active a,
+.red .active a:hover {
+  background-color:red;
+}
+
 #tile {
   width: 90%;
 }
