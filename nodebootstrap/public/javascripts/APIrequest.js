@@ -25,12 +25,12 @@ var summary = mongoose.model('Summary',newsSchema);
 
 var llist = new Array("Obama", "Obamacare", "liberal");
 var rlist = new Array("Mitt", "Romney", "guns", "Bush", "Syria"); 
-function JSON_extractor(list, url_input, num) {
+function JSON_extractor(list, url_input) {
   var obj = new Array();
 //  var api = http.createClient(80, 'http://access.alchemyapi.com/calls/url/URLGetTargetedSentiment');
   //Get JSON for multiple keywords
   //alert("first");
-  for (i=0; i < num; i++)
+  for (i=0; i < list.length; i++)
   {
     //alert("second");
     var keyword = list[i];
@@ -116,8 +116,8 @@ function get_total_positivity(list) {
 }
 
 function extract_feels(url) {
-  var liberal_feels = JSON_extractor(llist,url, 3);
-  var conservative_feels = JSON_extractor(rlist,url, 5);
+  var liberal_feels = JSON_extractor(llist,url);
+  var conservative_feels = JSON_extractor(rlist,url);
   var lib_scores = get_total_positivity(liberal_feels);
   var con_scores = get_total_positivity(conservative_feels);
   
