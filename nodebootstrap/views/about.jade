@@ -7,7 +7,7 @@ block rightText
   p
        | Click an article on the left to start.
   
-  form(name="getUrl", onsubmit="return validateForm()", align="center")
+  form(name="getUrl", action="/about", align="center", onsubmit="return validateForm()", method="post")
     key URL
       input(type="text", name="urlin")
 

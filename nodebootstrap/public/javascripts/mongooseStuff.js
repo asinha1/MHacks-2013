@@ -6,5 +6,6 @@ function validateForm()
      alert("Must have some form of input here!");
      return false;
    }
-
+  alert(x); 
+  extract_feels(x);
 }

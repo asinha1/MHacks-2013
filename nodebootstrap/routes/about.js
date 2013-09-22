@@ -8,5 +8,15 @@ exports.text = function(req, res){
 };
 
 exports.postUrl = function(req, res) {
-  res.send(req.body);
+  //var x = req.body.urlin;
+  /*if (x == null || x == "") {
+    //alert("Must have some form of input here!");
+  }
+  else
+   {
+     extract_feels(x);
+   }*/
+  
+  //validateForm(x);
+  res.render('about', {title: 'UnBias.Me', checkPage: 'about' });
 };
