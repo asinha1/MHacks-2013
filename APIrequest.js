@@ -1,7 +1,7 @@
 var request = require("request");
 var http = require("http");
 var mongoose = require("mongoose");
-console.log("Going to Connect");
+alert("Going to Connect");
 var mongoose = require('mongoose');
 mongoose.connect('ec2-54-200-60-55.us-west-2.compute.amazonaws.com/news');
 
