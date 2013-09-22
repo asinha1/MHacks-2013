@@ -1,16 +1,20 @@
-var request = require("request");
+//alert("bout to start");
+var request = require('request');
+//alert("start 1");
 var http = require("http");
+//alert("start 2");
 var mongoose = require("mongoose");
-
+//alert("step 3");
 var mongoose = require('mongoose');
+//alert("fucking pass already");
 mongoose.connect('ec2-54-200-60-55.us-west-2.compute.amazonaws.com/news');
-
+//alert("step 4");
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback () {
    console.log("Connected");
 });
-
+//alert("lets begin");
 var newsSchema = mongoose.Schema({
         link : String,
         bias : Number,
@@ -18,14 +22,18 @@ var newsSchema = mongoose.Schema({
 })
 var summary = mongoose.model('Summary',newsSchema);
 
-var llist = [];
-var rlist = []; 
-var JSON_extractor = function(list, url) {
-  var obj = [];
+var llist = new Array("Obama", "Obamacare", "liberal");
+var rlist = new Array("Mitt", "Romney", "guns", "Bush", "Syria"); 
+function JSON_extractor(list, url_input) {
+  var obj = new Array();
+  var api = http.createClient(80, 'http://access.alchemyapi.com/calls/url/URLGetTargetedSentiment');
   //Get JSON for multiple keywords
+  //alert("first");
   for (i=0; i < list.length; i++)
   {
+    //alert("second");
     var keyword = list[i];
+    
     var request = api.request('POST',
     {
       'target' : keyword,
@@ -59,7 +67,7 @@ var JSON_extractor = function(list, url) {
   return obj;
 }
 
-var get_total_positivity = function(list) {
+function get_total_positivity(list) {
   var pos = 0;
   var neg = 0;
   for (i=0; i < list.length;i++)
@@ -76,7 +84,7 @@ var get_total_positivity = function(list) {
   return [pos,neg]; 
 }
 
-var extract_feels = function(url) {
+function extract_feels(url) {
   var liberal_feels = JSON_extractor(llist,url);
   var conservative_feels = JSON_extractor(rlist,url);
   var lib_scores = get_total_positivity(liberal_feels);
@@ -103,3 +111,5 @@ var extract_feels = function(url) {
  
   }
 }
+
+extract_feels("http://www.foxnews.com/politics/2013/09/21/congress-looking-into-va-bonuses-amid-agency-problems/");
